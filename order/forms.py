@@ -1,8 +1,4 @@
 from django import forms
-from .models import Order
-from product.models import Product
-from users.models import Users
-from django.db import transaction
 
 class RegisterForm(forms.Form):
     def __init__(self, request, *args, **kwargs):
@@ -20,22 +16,9 @@ class RegisterForm(forms.Form):
     def clean(self):
         clean_data = super().clean()
         quantity = clean_data.get('quantity')
-        product_id = clean_data.get('product')
-        user = self.request.session.get('user')
+        product = clean_data.get('product')
 
-        if quantity and product_id and user:
-            with transaction.atomic():
-                prod = Product.objects.get(pk=product_id)
-                order = Order(
-                    quantity=quantity,
-                    product=prod,
-                    user=Users.objects.get(email=user)
-                )
-                order.save()
-                prod.stuck -= quantity
-                prod.save()
-        else:
-            self.product = product_id
+        if not (quantity and product):
             self.add_error('quantity', "값이 없습니다.")
             self.add_error('product', "값이 없습니다.")
             self.add_error('user', "값이 없습니다.")

@@ -1,6 +1,6 @@
 from django import forms
 from .models import Users
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password
 
 
 class RegisterForm(forms.Form):
@@ -32,12 +32,6 @@ class RegisterForm(forms.Form):
             if password != re_password:
                 self.add_error('password', '비밀번호가 서로 다릅니다.')
                 self.add_error('re_password', '비밀번호가 서로 다릅니다.')
-            else:
-                user = Users(
-                    email=email,
-                    password=make_password(password),
-                )
-                user.save()
 
 
 class LoginForm(forms.Form):
@@ -66,5 +60,3 @@ class LoginForm(forms.Form):
                 return
             if not (check_password(password, user.password)):
                 self.add_error("password", "패스워드가 일치하지 않습니다.")
-            else:
-                self.email = user.email
