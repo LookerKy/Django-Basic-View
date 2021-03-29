@@ -1,8 +1,10 @@
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormView
 from .models import Product
 from .forms import RegisterForm
 from order.forms import RegisterForm as OrderForm
+from users.decorators import login_required
 
 
 # Create your views here.
@@ -12,6 +14,7 @@ class ProductListView(ListView):
     context_object_name = 'product_list'
 
 
+@method_decorator(login_required, name='dispatch')
 class ProductCreate(FormView):
     template_name = 'register_product.html'
     form_class = RegisterForm
@@ -25,5 +28,5 @@ class ProductDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = OrderForm()
+        context['form'] = OrderForm(self.request)
         return context
