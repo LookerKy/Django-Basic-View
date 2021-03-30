@@ -26,11 +26,9 @@ class RegisterForm(forms.Form):
         description = clean_data.get('description')
         stuck = clean_data.get('stuck')
 
-        if name and price and description and stuck:
-            product = Product(
-                name=name,
-                price=price,
-                description=description,
-                stuck=stuck
-            )
-            product.save()
+        if not(name and price and description and stuck):
+            self.add_error('name', 'empty')
+            self.add_error('pri  ce', 'empty')
+            self.add_error('description', 'empty')
+            self.add_error('stuck', 'empty')
+
