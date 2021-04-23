@@ -3,10 +3,11 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormView
 from rest_framework import generics
 from rest_framework import mixins
-from .models import Product
-from .forms import RegisterForm
+
 from order.forms import RegisterForm as OrderForm
 from users.decorators import admin_required
+from .forms import RegisterForm
+from .models import Product
 from .serializers import ProductSerializer
 
 
